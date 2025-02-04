@@ -1,7 +1,9 @@
 resource "tailscale_acl" "as_json" {
   acl = jsonencode({
     tagOwners : {
-      "tag:server" : []
+      "tag:server" : [],
+      "tag:k8s-operator" : [],
+      "tag:k8s" : ["tag:k8s-operator"],
     }
     acls : [
       {
@@ -25,6 +27,19 @@ resource "tailscale_acl" "as_json" {
         src : ["group:admin"]
         dst : ["tag:server"]
         users : ["autogroup:nonroot", "root"]
+      }
+    ]
+    grants : [
+      {
+        src : ["group:admin"]
+        dst : ["tag:k8s-operator"]
+        app : {
+          "tailscale.com/cap/kubernetes" : [{
+            impersonate : {
+              groups : ["system:masters"]
+            }
+          }]
+        }
       }
     ]
     nodeAttrs : [
