@@ -1,0 +1,48 @@
+gitlab-runner:
+  namespace: "gitlab-runner"
+
+  gitlabUrl: https://gitlab.com/
+
+  concurrent: 3
+  checkInterval: 5
+  revisionHistoryLimit: 5
+
+  # pod grace period is 1h for job draining; don't wait that long on a wedged runner
+  livenessProbe:
+    terminationGracePeriodSeconds: 30
+
+  rbac:
+    create: true
+
+  serviceAccount:
+    create: true
+
+  metrics:
+    enabled: true
+
+  service:
+    enabled: true
+
+  nodeSelector:
+    kubernetes.io/hostname: mac-mini-orbstack
+
+  runners:
+    secret: gitlab-runner
+    config: |
+      [[runners]]
+        name = "kyokuping-group-runner"
+        executor = "kubernetes"
+        [runners.kubernetes]
+          namespace = "{{ default .Release.Namespace .Values.runners.jobNamespace }}"
+          image = "ubuntu:22.04"
+          privileged = false
+          pull_policy = "if-not-present"
+          poll_timeout = 600
+          cpu_requests = "500m"
+          memory_requests = "1Gi"
+          cpu_limit = "2"
+          memory_limit = "4Gi"
+          empty_dir_size_limit = "2Gi"
+          [runners.kubernetes.node_selector]
+            "kubernetes.io/arch" = "arm64"
+            "kubernetes.io/hostname" = "mac-mini-orbstack"

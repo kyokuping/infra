@@ -6,3 +6,5 @@
 
 charts/
 Chart.lock
+
+secret.yaml
