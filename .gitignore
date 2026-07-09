@@ -8,3 +8,5 @@ charts/
 Chart.lock
 
 .DS_Store
+
+secret.yaml
