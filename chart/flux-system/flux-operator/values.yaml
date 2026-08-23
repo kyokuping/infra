@@ -1,0 +1,81 @@
+flux-operator:
+  multitenancy:
+    enabled: false
+
+  reporting:
+    interval: 5m
+
+  web:
+    enabled: true
+    networkPolicy:
+      create: true
+    rbac:
+      createRoles: true
+      createAggregation: false
+
+    ingress:
+      enabled: false
+
+    httpRoute:
+      enabled: true
+
+  image:
+    repository: ghcr.io/controlplaneio-fluxcd/flux-operator
+    tag: ""
+    pullSecrets: [ ]
+    imagePullPolicy: IfNotPresent
+
+  priorityClassName: "system-cluster-critical"
+
+  apiPriority:
+    enabled: true
+    level: workload-low
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8081
+    initialDelaySeconds: 15
+    periodSeconds: 20
+
+  readinessProbe:
+    httpGet:
+      path: /readyz
+      port: 8081
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+  serviceAccount:
+    create: true
+    automount: true
+    name: "flux-operator"
+
+  rbac:
+    create: true
+    createAggregation: true
+
+  securityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  logLevel: "info"
+
+  serviceMonitor:
+    create: false
+    interval: 60s
+    scrapeTimeout: 30s
+    labels: { }
