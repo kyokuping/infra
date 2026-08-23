@@ -1,0 +1,12 @@
+apiVersion: v2
+name: flux-instance
+description: A Helm chart for a Flux instance
+
+type: application
+
+version: 0.1.0
+
+dependencies:
+  - name: flux-instance
+    version: 0.58.0
+    repository: oci://ghcr.io/controlplaneio-fluxcd/charts

@@ -1,0 +1,43 @@
+flux-instance:
+  instance:
+    distribution:
+      version: "2.9.x"
+      registry: "ghcr.io/fluxcd"
+      artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:latest"
+      artifactPullSecret: "flux-auth"
+      imagePullSecret: "flux-auth"
+
+    components:
+      - source-controller
+      - kustomize-controller
+      - helm-controller
+      - notification-controller
+      - image-reflector-controller
+      - image-automation-controller
+
+    cluster:
+      type: kubernetes
+      size: "small"
+      domain: "cluster.local"
+      networkPolicy: true
+      multitenant: false
+      tenantDefaultServiceAccount: "flux-reconciler"
+
+    commonMetadata:
+      labels:
+        app.kubernetes.io/managed-by: "flux-operator"
+        app.kubernetes.io/part-of: "flux-system"
+      annotations:
+        ops.kyoku.dev/owner: "kyokuping"
+
+  healthcheck:
+    enabled: true
+    timeout: 5m
+
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 64Mi
