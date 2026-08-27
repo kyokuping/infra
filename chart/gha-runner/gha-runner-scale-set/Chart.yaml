@@ -1,0 +1,13 @@
+apiVersion: v2
+name: gha-runner-scale-set
+description: A Helm chart for AutoscalingRunnerSets
+
+type: application
+
+version: 0.1.0
+
+dependencies:
+  - name: gha-runner-scale-set
+    version: 0.14.2
+    repository: oci://ghcr.io/actions/actions-runner-controller-charts
+    alias: system-playground

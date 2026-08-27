@@ -1,0 +1,12 @@
+system-playground:
+  githubConfigSecret: ghr-github-token
+  githubConfigUrl: "https://github.com/kyokuping/system-design-playground"
+  runnerScaleSetName: manura
+
+  minRunners: 0
+  maxRunners: 3
+
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: mac-mini-orbstack
