@@ -4,12 +4,20 @@ resource "tailscale_acl" "as_json" {
       "tag:server" : [],
       "tag:k8s-operator" : [],
       "tag:k8s" : ["tag:k8s-operator"],
+      "tag:zpyo-deploy" : [],
+      "tag:zpyo-host" : [],
     }
     acls : [
       {
         action : "accept"
-        src : ["*"]
+        src : ["autogroup:member", "tag:server", "tag:k8s-operator", "tag:k8s"]
         dst : ["*:*"]
+      },
+      {
+        action : "accept"
+        src : ["tag:zpyo-deploy"]
+        dst : ["tag:zpyo-host:22"]
+        proto : "tcp"
       }
     ]
     groups : {
@@ -25,8 +33,14 @@ resource "tailscale_acl" "as_json" {
       {
         action : "check"
         src : ["group:admin"]
-        dst : ["tag:server"]
+        dst : ["tag:server", "tag:zpyo-host"]
         users : ["autogroup:nonroot", "root"]
+      },
+      {
+        action : "accept"
+        src : ["tag:zpyo-deploy"]
+        dst : ["tag:zpyo-host"]
+        users : ["zpyo-deploy"]
       }
     ]
     grants : [
@@ -46,6 +60,27 @@ resource "tailscale_acl" "as_json" {
       {
         target : ["autogroup:member"]
         attr : ["funnel"]
+      }
+    ]
+    tests : [
+      {
+        src : "tag:zpyo-deploy"
+        proto : "tcp"
+        accept : ["tag:zpyo-host:22"]
+        deny : ["tag:zpyo-host:80", "tag:zpyo-host:443", "tag:k8s-operator:6443"]
+      },
+      {
+        src : "tag:zpyo-deploy"
+        proto : "udp"
+        deny : ["tag:zpyo-host:22"]
+      }
+    ]
+    sshTests : [
+      {
+        src : "tag:zpyo-deploy"
+        dst : ["tag:zpyo-host"]
+        accept : ["zpyo-deploy"]
+        deny : ["root", "zpyo"]
       }
     ]
   })
