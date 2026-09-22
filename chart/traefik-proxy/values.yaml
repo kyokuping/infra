@@ -1,0 +1,20 @@
+traefik:
+  providers:
+    kubernetesCRD:
+      allowExternalNameServices: true
+  ports:
+    tailnet:
+      port: 9000
+      expose:
+        default: false
+        simplejev: true
+      exposedPort: 80
+  service:
+    additionalServices:
+      simplejev:
+        type: LoadBalancer
+        annotations:
+          tailscale.com/hostname: simple-jev
+        spec:
+          loadBalancerClass: tailscale
+          allocateLoadBalancerNodePorts: false

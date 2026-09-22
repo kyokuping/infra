@@ -1,0 +1,8 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Release.Name }}-buffering
+spec:
+  buffering:
+    maxRequestBodyBytes: {{ .Values.maxRequestBodyBytes | int }}
+    memRequestBodyBytes: {{ .Values.maxRequestBodyBytes | int }}

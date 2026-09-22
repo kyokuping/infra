@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  entryPoints:
+    - tailnet
+  routes:
+    - kind: Rule
+      match: Method(`POST`) && Path(`/v1/classifier`)
+      middlewares:
+        - name: {{ .Release.Name }}-ratelimit
+        - name: {{ .Release.Name }}-headers
+        - name: {{ .Release.Name }}-buffering
+      services:
+        - name: {{ .Values.serviceName }}
+          port: {{ .Values.servicePort }}

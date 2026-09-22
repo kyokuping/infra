@@ -1,0 +1,9 @@
+serviceName: simple-jev
+servicePort: 18000
+tailscaleFQDN: dongodb-mac-mini.tailbf9b0.ts.net
+
+rateLimit:
+  average: 2
+  burst: 5
+
+maxRequestBodyBytes: 1048576
