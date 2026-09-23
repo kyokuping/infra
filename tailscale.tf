@@ -7,19 +7,9 @@ resource "tailscale_acl" "as_json" {
       "tag:zpyo-deploy" : [],
       "tag:zpyo-host" : [],
     }
-    acls : [
-      {
-        action : "accept"
-        src : ["autogroup:member", "tag:server", "tag:k8s-operator", "tag:k8s"]
-        dst : ["*:*"]
-      },
-      {
-        action : "accept"
-        src : ["tag:zpyo-deploy"]
-        dst : ["tag:zpyo-host:22"]
-        proto : "tcp"
-      }
-    ]
+    hosts : {
+      "dongodb-mac-mini" : "100.117.17.121",
+    }
     groups : {
       "group:admin" : var.tailscale_admins
     }
@@ -45,8 +35,29 @@ resource "tailscale_acl" "as_json" {
     ]
     grants : [
       {
+        src : ["autogroup:member"]
+        dst : ["*"]
+        ip : ["*"]
+      },
+      {
+        src : ["tag:server", "tag:k8s-operator", "tag:k8s"]
+        dst : ["tag:server", "tag:k8s-operator", "tag:k8s"]
+        ip : ["*"]
+      },
+      {
+        src : ["tag:k8s"]
+        dst : ["dongodb-mac-mini"]
+        ip : ["tcp:18000"]
+      },
+      {
+        src : ["tag:zpyo-deploy"]
+        dst : ["tag:zpyo-host"]
+        ip : ["tcp:22"]
+      },
+      {
         src : ["group:admin"]
         dst : ["tag:k8s-operator"]
+        ip : ["tcp:443"]
         app : {
           "tailscale.com/cap/kubernetes" : [{
             impersonate : {
@@ -54,12 +65,6 @@ resource "tailscale_acl" "as_json" {
             }
           }]
         }
-      }
-    ]
-    nodeAttrs : [
-      {
-        target : ["autogroup:member"]
-        attr : ["funnel"]
       }
     ]
     tests : [
@@ -73,6 +78,21 @@ resource "tailscale_acl" "as_json" {
         src : "tag:zpyo-deploy"
         proto : "udp"
         deny : ["tag:zpyo-host:22"]
+      },
+      {
+        src : "group:admin"
+        proto : "tcp"
+        accept : ["tag:k8s-operator:443"]
+      },
+      {
+        src : "kyokuping@github"
+        proto : "tcp"
+        accept : ["tag:k8s:80", "tag:server:22"]
+      },
+      {
+        src : "tag:k8s"
+        proto : "tcp"
+        accept : ["dongodb-mac-mini:18000"]
       }
     ]
     sshTests : [
