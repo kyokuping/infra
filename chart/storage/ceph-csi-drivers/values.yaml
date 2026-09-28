@@ -1,0 +1,39 @@
+ceph-csi-drivers:
+  operatorConfig:
+    namespace: rook-ceph
+    driverSpecDefaults:
+      log:
+        verbosity: 0
+        rotation:
+          enabled: true
+          maxFiles: 3
+          maxLogSize: 100M
+          periodicity: daily
+      imageSet:
+        name: rook-csi-operator-image-set-configmap
+      nodePlugin:
+        priorityClassName: system-node-critical
+      controllerPlugin:
+        priorityClassName: system-cluster-critical
+        replicas: 1
+
+  drivers:
+    rbd:
+      enabled: true
+      name: rook-ceph.rbd.csi.ceph.com
+      log:
+        verbosity: 0
+        rotation:
+          enabled: true
+          maxFiles: 3
+          maxLogSize: 100M
+          periodicity: daily
+    cephfs:
+      enabled: false
+      name: rook-ceph.cephfs.csi.ceph.com
+    nfs:
+      enabled: false
+      name: rook-ceph.nfs.csi.ceph.com
+    nvmeof:
+      enabled: false
+      name: rook-ceph.nvmeof.csi.ceph.com

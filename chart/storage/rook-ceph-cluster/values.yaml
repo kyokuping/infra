@@ -1,0 +1,104 @@
+rook-ceph-cluster:
+  toolbox:
+    enabled: true
+
+  cephClusterSpec:
+    continueUpgradeAfterChecksEvenIfNotHealthy: true
+
+    mgr:
+      count: 1
+
+    storage:
+      useAllNodes: false
+      useAllDevices: false
+      allowDeviceClassUpdate: true
+      nodes:
+        - name: orangepi5-1
+          devices:
+            - name: sda
+        - name: mac-mini-orbstack
+          devices:
+            - name: sda
+        - name: orangepi5-2
+          devices:
+            - name: sda
+              config:
+                deviceClass: bulk
+
+    resources:
+      mon:
+        limits:
+          memory: 1Gi
+        requests:
+          cpu: 250m
+      mgr:
+        requests:
+          cpu: 250m
+      osd:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 500m
+          memory: 2Gi
+      prepareosd:
+        requests:
+          cpu: 250m
+
+    crashCollector:
+      disable: true
+
+    logCollector:
+      enabled: false
+
+    dashboard:
+      ssl: false
+
+  cephBlockPools:
+    - name: ceph-blockpool
+      spec:
+        failureDomain: host
+        enableCrushUpdates: true
+        replicated:
+          size: 3
+        parameters:
+          min_size: "2"
+          pg_autoscale_mode: "off"
+          pg_num: "32"
+      storageClass:
+        enabled: true
+        name: ceph-block
+        isDefault: true
+        parameters: &rbdParameters
+          imageFormat: "2"
+          imageFeatures: layering
+          csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+          csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+          csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/controller-publish-secret-name: rook-csi-rbd-provisioner
+          csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+          csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/fstype: ext4
+
+    - name: ceph-scratch
+      spec:
+        failureDomain: osd
+        deviceClass: bulk
+        replicated:
+          size: 1
+          requireSafeReplicaSize: false
+        quotas:
+          maxSize: "2T"
+        parameters:
+          min_size: "1"
+          pg_autoscale_mode: "off"
+          pg_num: "32"
+      storageClass:
+        enabled: true
+        name: ceph-scratch
+        parameters: *rbdParameters
+
+  cephFileSystems: []
+
+  cephObjectStores: []
