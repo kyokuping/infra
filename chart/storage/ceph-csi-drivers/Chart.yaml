@@ -1,6 +1,9 @@
 apiVersion: v2
 name: ceph-csi-drivers
 description: A Helm chart for the Ceph-CSI Driver CRs, service accounts and RBAC
+annotations:
+  releaseName: ceph-csi-drivers
+  namespace: rook-ceph
 
 type: application
 

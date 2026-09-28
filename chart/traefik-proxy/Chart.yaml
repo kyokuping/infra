@@ -1,6 +1,9 @@
 apiVersion: v2
 name: traefik-proxy
 description: A Helm chart for Traefik Proxy
+annotations:
+  releaseName: traefik-proxy
+  namespace: kube-system
 
 type: application
 version: 0.1.1

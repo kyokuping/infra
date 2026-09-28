@@ -1,6 +1,9 @@
 apiVersion: v2
 name: tailscale-operator
 description: A Helm chart for tailscale-operator
+annotations:
+  releaseName: tailscale-operator
+  namespace: tailscale
 
 type: application
 

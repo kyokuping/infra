@@ -1,6 +1,9 @@
 apiVersion: v2
 name: secrets-operator
 description: A Helm chart for secret-operator
+annotations:
+  releaseName: secrets-operator
+  namespace: kube-system
 
 type: application
 

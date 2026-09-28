@@ -1,6 +1,9 @@
 apiVersion: v2
 name: gha-runner-scale-set
 description: A Helm chart for AutoscalingRunnerSets
+annotations:
+  releaseName: arc-runner-set
+  namespace: arc-runners
 
 type: application
 

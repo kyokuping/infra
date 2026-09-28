@@ -1,6 +1,9 @@
 apiVersion: v2
 name: rook-ceph
 description: A Helm chart for the Rook Ceph operator
+annotations:
+  releaseName: rook-ceph
+  namespace: rook-ceph
 
 type: application
 

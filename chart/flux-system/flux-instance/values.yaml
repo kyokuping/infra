@@ -23,6 +23,14 @@ flux-instance:
       multitenant: false
       tenantDefaultServiceAccount: "flux-reconciler"
 
+    sync:
+      kind: GitRepository
+      name: infra
+      url: https://github.com/kyokuping/infra.git
+      ref: refs/heads/main
+      path: ./flux
+      interval: 5m
+
     commonMetadata:
       labels:
         app.kubernetes.io/managed-by: "flux-operator"

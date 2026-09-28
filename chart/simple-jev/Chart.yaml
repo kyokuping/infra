@@ -1,5 +1,8 @@
 apiVersion: v2
 name: simple-jev
 description: Traefik route for simple-jev
+annotations:
+  releaseName: simple-jev
+  namespace: simple-jev
 type: application
 version: 0.1.0

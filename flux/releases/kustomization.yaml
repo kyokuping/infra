@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - secrets-operator.yaml
+  - arc.yaml
+  - arc-runner-set.yaml
+  - gitlab-runner.yaml
+  - tailscale-operator.yaml
+  - traefik-proxy.yaml
+  - simple-jev.yaml
+  - rook-ceph.yaml
+  - ceph-csi-drivers.yaml
+  - rook-ceph-cluster.yaml
+  - cloudnative-pg.yaml

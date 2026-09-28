@@ -1,6 +1,9 @@
 apiVersion: v2
 name: gitlab-runner
 description: A Helm chart for gitlab-runner
+annotations:
+  releaseName: gitlab-runner
+  namespace: gitlab-runner
 
 type: application
 

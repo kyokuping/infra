@@ -1,6 +1,9 @@
 apiVersion: v2
 name: gha-runner-scale-set-controller
 description: A Helm chart for actions-runner-controller
+annotations:
+  releaseName: arc
+  namespace: arc-systems
 
 type: application
 
