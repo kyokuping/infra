@@ -2,6 +2,11 @@ rook-ceph-cluster:
   toolbox:
     enabled: true
 
+  cephClusterMetadata:
+    annotations:
+      kustomize.toolkit.fluxcd.io/prune: disabled
+      helm.sh/resource-policy: keep
+
   cephClusterSpec:
     continueUpgradeAfterChecksEvenIfNotHealthy: true
 
