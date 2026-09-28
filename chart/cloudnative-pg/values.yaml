@@ -1,0 +1,2 @@
+cloudnative-pg:
+  priorityClassName: system-cluster-critical
