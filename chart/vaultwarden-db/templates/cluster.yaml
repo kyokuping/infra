@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-db
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  instances: 1
+  bootstrap:
+    initdb:
+      database: vaultwarden
+      owner: vaultwarden
+  storage:
+    storageClass: ceph-block
+    size: 2Gi
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: r2

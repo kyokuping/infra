@@ -1,0 +1,22 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: r2
+spec:
+  retentionPolicy: 30d
+  configuration:
+    destinationPath: s3://{{ .Values.backup.bucket }}/
+    endpointURL: https://{{ .Values.backup.accountId }}.r2.cloudflarestorage.com
+    s3Credentials:
+      accessKeyId:
+        name: r2-credentials
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: r2-credentials
+        key: SECRET_ACCESS_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
