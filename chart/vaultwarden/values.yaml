@@ -1,0 +1,29 @@
+vaultwarden:
+  database:
+    type: postgresql
+    existingSecret: vaultwarden-db-app
+    existingSecretKey: uri
+  storage:
+    data:
+      name: vaultwarden-data
+      size: 1Gi
+      class: ceph-block
+      accessMode: ReadWriteOnce
+      keepPvc: true
+  strategy:
+    type: Recreate
+  domain: https://pass.kyoku.dev
+  signupsAllowed: "false"
+  adminToken:
+    existingSecret: vaultwarden-admin
+    existingSecretKey: token
+  ipHeader: CF-Connecting-IP
+  ingress:
+    enabled: true
+    class: traefik-proxy
+    nginxIngressAnnotations: false
+    hostname: pass.kyoku.dev
+    tlsSecret: vaultwarden-tls
+    additionalAnnotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure

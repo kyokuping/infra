@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}-block-admin
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`pass.kyoku.dev`) && PathPrefix(`/admin`)
+      middlewares:
+        - name: {{ .Release.Name }}-deny-all
+      services:
+        - name: {{ .Release.Name }}
+          port: http
+  tls:
+    secretName: vaultwarden-tls

@@ -1,0 +1,15 @@
+apiVersion: v2
+name: vaultwarden
+description: A Helm chart for Vaultwarden
+annotations:
+  releaseName: vaultwarden
+  namespace: vaultwarden
+
+type: application
+
+version: 0.1.0
+
+dependencies:
+  - name: vaultwarden
+    version: 0.46.2
+    repository: https://guerzon.github.io/vaultwarden

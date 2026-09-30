@@ -16,3 +16,4 @@ resources:
   - cert-manager.yaml
   - cert-manager-issuer.yaml
   - vaultwarden-db.yaml
+  - vaultwarden.yaml

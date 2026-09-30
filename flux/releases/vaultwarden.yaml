@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vaultwarden
+  namespace: flux-system
+spec:
+  interval: 30m
+  releaseName: vaultwarden
+  targetNamespace: vaultwarden
+  storageNamespace: vaultwarden
+  dependsOn:
+    - name: vaultwarden-db
+    - name: traefik-proxy
+    - name: cert-manager-issuer
+  chart:
+    spec:
+      chart: ./chart/vaultwarden
+      reconcileStrategy: Revision
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: infra
+        namespace: flux-system
