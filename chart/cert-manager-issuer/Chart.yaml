@@ -1,0 +1,10 @@
+apiVersion: v2
+name: cert-manager-issuer
+description: ClusterIssuers for cert-manager
+annotations:
+  releaseName: cert-manager-issuer
+  namespace: cert-manager
+
+type: application
+
+version: 0.1.0

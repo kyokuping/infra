@@ -1,24 +1,19 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cloudnative-pg
+  name: cert-manager-issuer
   namespace: flux-system
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   interval: 30m
-  releaseName: cloudnative-pg
-  targetNamespace: cnpg-system
-  storageNamespace: cnpg-system
+  releaseName: cert-manager-issuer
+  targetNamespace: cert-manager
+  storageNamespace: cert-manager
   dependsOn:
     - name: cert-manager
-  install:
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
+    - name: secrets-operator
   chart:
     spec:
-      chart: ./chart/cloudnative-pg
+      chart: ./chart/cert-manager-issuer
       reconcileStrategy: Revision
       interval: 5m
       sourceRef:

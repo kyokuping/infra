@@ -13,3 +13,5 @@ resources:
   - ceph-csi-drivers.yaml
   - rook-ceph-cluster.yaml
   - cloudnative-pg.yaml
+  - cert-manager.yaml
+  - cert-manager-issuer.yaml
