@@ -1,0 +1,14 @@
+function:
+  type: executable_pool
+  name: laya_raw
+  return_type: String
+  argument:
+    type: String
+    name: body
+  format: TabSeparatedRaw
+  command: laya.sh
+  pool_size: {{ .Values.laya.poolSize }}
+  max_command_execution_time: 600
+  command_read_timeout: 600000
+  command_write_timeout: 600000
+  deterministic: false

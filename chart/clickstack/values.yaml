@@ -11,6 +11,11 @@ mongodb:
       cpu: 500m
       memory: 1Gi
 
+laya:
+  url: http://simple-jev.simple-jev.svc.cluster.local:18000/v1/classifier
+  poolSize: 4
+  timeoutSeconds: 60
+
 clickstack:
   hyperdx:
     config:
@@ -59,8 +64,21 @@ clickstack:
           resources:
             limits:
               cpu: 2
+          volumeMounts:
+            - name: udf
+              mountPath: /opt/clickhouse-udf
+              readOnly: true
+        podTemplate:
+          volumes:
+            - name: udf
+              configMap:
+                name: clickstack-clickhouse-udf
+                defaultMode: 0755
         settings:
           extraConfig:
+            user_defined_zookeeper_path: /clickhouse/user_defined
+            user_defined_executable_functions_config: /opt/clickhouse-udf/*_function.yaml
+            user_scripts_path: /opt/clickhouse-udf/
             background_pool_size: 4
             background_merges_mutations_concurrency_ratio: 1
             mark_cache_size: 268435456
