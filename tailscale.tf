@@ -6,6 +6,7 @@ resource "tailscale_acl" "as_json" {
       "tag:k8s" : ["tag:k8s-operator"],
       "tag:zpyo-deploy" : [],
       "tag:zpyo-host" : [],
+      "tag:workstation" : ["group:admin"],
     }
     hosts : {
       "dongodb-mac-mini" : "100.117.17.121",
@@ -23,7 +24,7 @@ resource "tailscale_acl" "as_json" {
       {
         action : "check"
         src : ["group:admin"]
-        dst : ["tag:server", "tag:zpyo-host"]
+        dst : ["tag:server", "tag:zpyo-host", "tag:workstation"]
         users : ["autogroup:nonroot", "root"]
       },
       {
@@ -104,4 +105,18 @@ resource "tailscale_acl" "as_json" {
       }
     ]
   })
+}
+
+data "tailscale_device" "workstation" {
+  hostname = var.tailscale_workstation_hostname
+}
+
+resource "tailscale_device_tags" "workstation" {
+  device_id = data.tailscale_device.workstation.id
+  tags      = ["tag:workstation"]
+}
+
+resource "tailscale_device_key" "workstation" {
+  device_id           = data.tailscale_device.workstation.id
+  key_expiry_disabled = true
 }

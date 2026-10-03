@@ -15,3 +15,7 @@ variable "tailscale_tailnet" {
 variable "tailscale_admins" {
   type = list(string)
 }
+
+variable "tailscale_workstation_hostname" {
+  type = string
+}
