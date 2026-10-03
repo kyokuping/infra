@@ -14,9 +14,21 @@ vaultwarden:
     type: Recreate
   domain: https://pass.kyoku.dev
   signupsAllowed: "false"
+  signupsVerify: "false"
   adminToken:
     existingSecret: vaultwarden-admin
     existingSecretKey: token
+  smtp:
+    existingSecret: vaultwarden-smtp
+    host: smtp.mailgun.org
+    security: starttls
+    port: 587
+    from: manura@kyoku.dev
+    fromName: Vaultwarden
+    username:
+      existingSecretKey: SMTP_USERNAME
+    password:
+      existingSecretKey: SMTP_PASSWORD
   ipHeader: CF-Connecting-IP
   ingress:
     enabled: true
