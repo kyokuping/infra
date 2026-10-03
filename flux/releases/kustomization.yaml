@@ -20,3 +20,4 @@ resources:
   - clickhouse-operator.yaml
   - clickstack-values.yaml
   - clickstack.yaml
+  - otel-agent.yaml

@@ -1,0 +1,15 @@
+apiVersion: v2
+name: otel-agent
+description: Node log collector shipping pod logs to ClickStack
+annotations:
+  releaseName: otel-agent
+  namespace: otel-agent
+
+type: application
+
+version: 0.1.0
+
+dependencies:
+  - name: opentelemetry-collector
+    version: 0.175.0
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
