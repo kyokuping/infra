@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: clickstack-values
+  namespace: flux-system
+spec:
+  encryptedData:
+    values.yaml: AgAGWDEGsYnra2rrAkk+Ia9MZWfmVvRXAbsconTlf7640A/bT/ZH6kVmuAU78WTZ6F08Qtpd5fiQL36Oi/0izRYpte2hPeUALFEhZ2xw9AlkEb28vb10ycJX1S5pmciANmn8I/wKKsz5gKYr0LFFMUVNFG+Jg5OdfG4nidJrGUCj5kzy6bJNa2Bp5LltF2WGJHALYXeyig924rRY/0W7QsI7TsXvXrotfmyaUeDF3WHmuUP/st4oWf9lxGCgmFLF3zbr8ms5AvtWsg5MVRt7ctuPOtmEDVslEAqOsdQCwm/HYldhURKrGzrAcOgY+6plgtVyChdNhcQT7dCQT3a0Ou3vGCldC5ym/d/dTeaMV3mC/8hoSzWPvgE3HPe7+hfuCUjVKfe2cdX6Wceuo7BZlhsG9ZXVYBdGql79QvTBb2Wd4ZYVjnQNzWQIecZRVXDbjevTVTnXvYmvqlCmj3x+36YycO+3D7uwjFrPrg522h4arldhmnPMAfqQo5VuGGy1sfwLR5okazUKi3F/anceWrgsH3GVKA7PZkPvOB0h0aL8eOtmUgAyOelKzT2WDFv3FwZO6GDnBgDXVQqqSGJGwZKuHWogT+UHeZEY/WtrIHRhM1oIST/mNQ6TuvyXYoi+kVghjKA3BcIIQYV137zEsgHqO1O+pSNlnJispid2Iz+CeBrQOLKGf+u0d1FVBXgLr+B+4DDIFmI94oBfVn0ZVJAdUY62tjtMujm995gPv0onCDig8aGa46D5THo1vBdD/1qdh0HdavMUWuvfqWfjY586Vt5wMJeeWrkpliuR7B/syD7gradrGQ6Idrr2zfWxuiUdd81inaiRob18wkK8sdUVJfSijQOVnzjayo8mKcyRgLLJfz0dSsNV80K43dvZDEtXLC3VIszRVYJNxKDsulFUBaNVsiRogmdr+ckURQwC8e4R0NZhSh5jF6ORStGVGFW/mXSGSROaHvYNXK76afKbTGoEk73BOlihf6D6B+LMNJ+NZJrFuC0fRY7OQBz7VIkabglFu9X1xLLZm7oqamP9E3kadzIf9bPb9XBuO9/BxYsbSbzyBdbFzUHhtyJUpTeNzIzjfkwp/XazlrSY
+  template:
+    metadata:
+      creationTimestamp: null
+      name: clickstack-values
+      namespace: flux-system
+    type: Opaque

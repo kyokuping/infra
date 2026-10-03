@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-mongodb
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Release.Name }}-mongodb
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: clickstack
+              app.kubernetes.io/instance: {{ .Release.Name }}
+              app: {{ .Release.Name }}
+      ports:
+        - protocol: TCP
+          port: 27017

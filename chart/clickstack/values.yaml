@@ -1,0 +1,87 @@
+mongodb:
+  tag: "7.0"
+  rootUsername: root
+  size: 5Gi
+  storageClass: ceph-block
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+clickstack:
+  hyperdx:
+    config:
+      FRONTEND_URL: https://clickstack.tailbf9b0.ts.net
+      USAGE_STATS_ENABLED: "false"
+      HYPERDX_OTEL_EXPORTER_TABLES_TTL: "168h"
+      MONGO_URI: null
+    deployment:
+      initContainers:
+        - name: wait-for-mongodb
+          image: busybox@sha256:1fcf5df59121b92d61e066df1788e8df0cc35623f5d62d9679a41e163b6a0cdb
+          command: ['sh', '-c', 'until nc -z clickstack-mongodb 27017; do echo waiting for mongodb; sleep 2; done']
+      env:
+        - name: MONGO_URI
+          value: mongodb://root:$(MONGODB_PASSWORD)@clickstack-mongodb:27017/hyperdx?authSource=admin
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 1
+          memory: 1Gi
+
+  mongodb:
+    enabled: false
+
+  clickhouse:
+    keeper:
+      spec:
+        containerTemplate:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+        dataVolumeClaimSpec:
+          storageClassName: ceph-block
+          resources:
+            requests:
+              storage: 2Gi
+    cluster:
+      spec:
+        containerTemplate:
+          resources:
+            limits:
+              cpu: 2
+        settings:
+          extraConfig:
+            background_pool_size: 4
+            background_merges_mutations_concurrency_ratio: 1
+            mark_cache_size: 268435456
+            index_mark_cache_size: 67108864
+            primary_index_cache_size: 67108864
+            merge_tree:
+              merge_max_block_size: 1024
+              number_of_free_entries_in_pool_to_execute_mutation: 2
+              number_of_free_entries_in_pool_to_lower_max_size_of_merge: 2
+              number_of_free_entries_in_pool_to_execute_optimize_entire_partition: 2
+        dataVolumeClaimSpec:
+          storageClassName: ceph-block
+          resources:
+            requests:
+              storage: 20Gi
+
+  otel-collector:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi

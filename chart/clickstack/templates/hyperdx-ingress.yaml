@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-tailnet
+spec:
+  ingressClassName: tailscale
+  tls:
+    - hosts:
+        - clickstack
+  defaultBackend:
+    service:
+      name: {{ .Release.Name }}-app
+      port:
+        name: app
