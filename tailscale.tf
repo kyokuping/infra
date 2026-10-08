@@ -46,6 +46,11 @@ resource "tailscale_acl" "as_json" {
         ip : ["*"]
       },
       {
+        src : ["tag:server"]
+        dst : ["10.200.0.1/32"]
+        ip : ["tcp:6443"]
+      },
+      {
         src : ["tag:k8s"]
         dst : ["dongodb-mac-mini"]
         ip : ["tcp:18000"]
@@ -113,7 +118,7 @@ data "tailscale_device" "workstation" {
 
 resource "tailscale_device_tags" "workstation" {
   device_id = data.tailscale_device.workstation.id
-  tags      = ["tag:workstation"]
+  tags      = ["tag:server", "tag:workstation"]
 }
 
 resource "tailscale_device_key" "workstation" {
