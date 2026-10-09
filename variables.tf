@@ -1,3 +1,8 @@
+variable "kubeconfig_path" {
+  type    = string
+  default = "~/.kube/config"
+}
+
 variable "tailscale_oauth_client_id" {
   type      = string
   sensitive = true
