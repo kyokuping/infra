@@ -1,0 +1,14 @@
+nvidia-device-plugin:
+  runtimeClassName: nvidia
+  failOnInitError: true
+
+  nodeSelector:
+    kubernetes.io/hostname: x86-worker
+
+  affinity: null
+
+  nfd:
+    enabled: false
+
+  gfd:
+    enabled: false
