@@ -8,6 +8,7 @@ traefik:
       expose:
         default: false
         simplejev: true
+        vllm: true
       exposedPort: 80
   service:
     additionalServices:
@@ -15,6 +16,13 @@ traefik:
         type: LoadBalancer
         annotations:
           tailscale.com/hostname: simple-jev
+        spec:
+          loadBalancerClass: tailscale
+          allocateLoadBalancerNodePorts: false
+      vllm:
+        type: LoadBalancer
+        annotations:
+          tailscale.com/hostname: vllm
         spec:
           loadBalancerClass: tailscale
           allocateLoadBalancerNodePorts: false

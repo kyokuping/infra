@@ -21,3 +21,4 @@ resources:
   - clickstack-values.yaml
   - clickstack.yaml
   - otel-agent.yaml
+  - vllm.yaml

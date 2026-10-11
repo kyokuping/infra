@@ -1,0 +1,21 @@
+image:
+  repository: vllm/vllm-openai
+  tag: v0.26.0
+
+model: dongchengli/gemma-3-4b-it-text-int4-gptq
+servedModelName: gemma-3-4b-it
+hfTokenSecretName: vllm-huggingface
+
+persistence:
+  storageClassName: ceph-block
+  size: 30Gi
+
+resources:
+  requests:
+    cpu: "2"
+    memory: 8Gi
+    nvidia.com/gpu: "1"
+  limits:
+    cpu: "8"
+    memory: 20Gi
+    nvidia.com/gpu: "1"

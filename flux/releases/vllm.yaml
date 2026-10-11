@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vllm
+  namespace: flux-system
+spec:
+  interval: 30m
+  releaseName: vllm
+  targetNamespace: vllm
+  storageNamespace: vllm
+  dependsOn:
+    - name: rook-ceph-cluster
+    - name: secrets-operator
+    - name: traefik-proxy
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: ./chart/vllm
+      reconcileStrategy: Revision
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: infra
+        namespace: flux-system

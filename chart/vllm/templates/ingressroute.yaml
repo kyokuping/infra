@@ -1,0 +1,13 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  entryPoints:
+    - tailnet
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/v1`)
+      services:
+        - name: {{ .Release.Name }}
+          port: 8000
