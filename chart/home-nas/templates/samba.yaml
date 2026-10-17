@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: samba, namespace: storage}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: samba}}
+  template:
+    metadata: {labels: {app: samba}}
+    spec:
+      automountServiceAccountToken: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      containers:
+      - name: samba
+        image: {{ .Values.samba.image }}
+        args: [run, smbd]
+        env: [{name: SAMBACC_CONFIG, value: /etc/samba-container/config.json}, {name: SAMBA_CONTAINER_ID, value: samba}]
+        ports: [{name: smb, containerPort: 445}]
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile: {type: RuntimeDefault}
+          capabilities:
+            drop: [ALL]
+            add: [CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, SETGID, SETUID, NET_BIND_SERVICE]
+        resources:
+          requests: {cpu: 100m, memory: 128Mi}
+          limits: {cpu: "1", memory: 512Mi}
+        readinessProbe: {tcpSocket: {port: smb}, initialDelaySeconds: 10, periodSeconds: 10, timeoutSeconds: 5}
+        livenessProbe: {tcpSocket: {port: smb}, initialDelaySeconds: 30, periodSeconds: 30, timeoutSeconds: 5, failureThreshold: 3}
+        volumeMounts:
+        - {name: config, mountPath: /etc/samba-container, readOnly: true}
+        - {name: samba-cache, mountPath: /var/cache/samba}
+        - {name: samba-lib, mountPath: /var/lib/samba}
+        - {name: samba-log, mountPath: /var/log/samba}
+        - {name: samba-run, mountPath: /run/samba}
+        - {name: tmp, mountPath: /tmp}
+        - {name: homes, mountPath: /shares/homes}
+        - {name: shared, mountPath: /shares/shared}
+      volumes:
+      - {name: config, secret: {secretName: {{ .Values.samba.configSecret }}, items: [{key: config.json, path: config.json}]}}
+      - {name: samba-cache, emptyDir: {}}
+      - {name: samba-lib, emptyDir: {}}
+      - {name: samba-log, emptyDir: {}}
+      - {name: samba-run, emptyDir: {}}
+      - {name: tmp, emptyDir: {}}
+      - {name: homes, persistentVolumeClaim: {claimName: homes}}
+      - {name: shared, persistentVolumeClaim: {claimName: shared}}

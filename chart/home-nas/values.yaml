@@ -1,0 +1,16 @@
+# Values are verified during the Ceph provisioning procedure; credentials stay
+# in existing SealedSecrets, never in this file.
+cephfs:
+  clusterID: rook-ceph
+  fsName: home-fs
+  subvolumes: {homes: "", shared: ""}
+  nodeStageSecrets:
+    homes: homes-cephfs-node
+    shared: shared-cephfs-node
+  capacity: 2Ti
+samba:
+  image: quay.io/samba.org/samba-server:default-fedora-any@sha256:11832c27731ae4937460a3911cdb52f1e6021d0f5b237a9104bf5a8788159e65
+  # A SealedSecret-derived configuration in namespace storage. It must define
+  # separate kyoku/xiniha accounts, homes-kyoku and homes-xiniha shares,
+  # SMB3 minimum, and homes/shared shares.
+  configSecret: samba-config

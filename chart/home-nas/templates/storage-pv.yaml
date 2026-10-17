@@ -1,0 +1,25 @@
+{{- $c := .Values.cephfs }}
+{{- range $name, $path := $c.subvolumes }}
+{{- if not $path }}{{ fail (printf "cephfs.subvolumes.%s must be verified via ceph fs subvolume getpath" $name) }}{{- end }}
+{{- end }}
+{{- $volumes := list (dict "pv" "homes-pv" "claim" "homes" "path" $c.subvolumes.homes "secret" $c.nodeStageSecrets.homes) (dict "pv" "shared-pv" "claim" "shared" "path" $c.subvolumes.shared "secret" $c.nodeStageSecrets.shared) }}
+{{- range $v := $volumes }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $v.pv }}
+  annotations: {helm.sh/resource-policy: keep}
+spec:
+  capacity: {storage: {{ $c.capacity }}}
+  accessModes: [ReadWriteMany]
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  volumeMode: Filesystem
+  claimRef: {namespace: storage, name: {{ $v.claim }}}
+  csi:
+    driver: rook-ceph.cephfs.csi.ceph.com
+    volumeHandle: {{ $v.pv }}
+    nodeStageSecretRef: {name: {{ $v.secret }}, namespace: rook-ceph}
+    volumeAttributes: {clusterID: {{ $c.clusterID | quote }}, fsName: {{ $c.fsName | quote }}, staticVolume: "true", rootPath: {{ $v.path | quote }}}
+---
+{{- end }}

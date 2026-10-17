@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata: {name: home-nas, namespace: flux-system}
+spec:
+  interval: 30m
+  releaseName: home-nas
+  targetNamespace: storage
+  storageNamespace: storage
+  install:
+    createNamespace: true
+  valuesFrom:
+  - kind: Secret
+    name: home-nas-values
+    valuesKey: values.yaml
+  dependsOn:
+  - {name: rook-ceph-cluster}
+  - {name: ceph-csi-drivers}
+  - {name: tailscale-operator}
+  chart:
+    spec:
+      chart: ./chart/home-nas
+      reconcileStrategy: Revision
+      interval: 5m
+      sourceRef: {kind: GitRepository, name: infra, namespace: flux-system}

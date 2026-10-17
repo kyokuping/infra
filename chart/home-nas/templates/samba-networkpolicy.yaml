@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: samba-tailnet-only, namespace: storage}
+spec:
+  podSelector: {matchLabels: {app: samba}}
+  policyTypes: [Ingress, Egress]
+  ingress:
+  - from:
+    - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: tailscale}}
+      podSelector:
+        matchLabels:
+          tailscale.com/managed: "true"
+          tailscale.com/parent-resource: samba
+          tailscale.com/parent-resource-ns: storage
+          tailscale.com/parent-resource-type: svc
+    ports: [{protocol: TCP, port: 445}]
+  egress:
+  - to:
+    - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}
+      podSelector: {matchLabels: {k8s-app: kube-dns}}
+    ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]
