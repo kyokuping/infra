@@ -29,8 +29,15 @@ ceph-csi-drivers:
           maxLogSize: 100M
           periodicity: daily
     cephfs:
-      enabled: false
+      enabled: true
       name: rook-ceph.cephfs.csi.ceph.com
+      log:
+        verbosity: 0
+        rotation:
+          enabled: true
+          maxFiles: 3
+          maxLogSize: 100M
+          periodicity: daily
     nfs:
       enabled: false
       name: rook-ceph.nfs.csi.ceph.com

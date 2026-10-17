@@ -20,7 +20,9 @@ rook-ceph-cluster:
       nodes:
         - name: orangepi5-1
           devices:
-            - name: sda
+            # OSD 0 lives on this USB disk. Kernel sdX names can change after
+            # reboot, so use its stable udev path rather than /dev/sda.
+            - name: /dev/disk/by-id/usb-JMicron_Tech_DD56419883892-0:0
         - name: mac-mini-orbstack
           devices:
             - name: sda
@@ -104,6 +106,54 @@ rook-ceph-cluster:
         name: ceph-scratch
         parameters: *rbdParameters
 
-  cephFileSystems: []
+  cephFileSystems:
+    # One shared filesystem. Application data is split into static subvolumes.
+    - name: home-fs
+      spec:
+        metadataPool:
+          failureDomain: host
+          replicated:
+            size: 3
+          parameters:
+            min_size: "2"
+            pg_autoscale_mode: "off"
+            pg_num: "16"
+        dataPools:
+          - name: data0
+            failureDomain: host
+            replicated:
+              size: 3
+            parameters:
+              min_size: "2"
+              pg_autoscale_mode: "off"
+              pg_num: "32"
+        metadataServer:
+          activeCount: 1
+          activeStandby: true
+          priorityClassName: system-cluster-critical
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 1Gi
+      storageClass:
+        enabled: true
+        isDefault: false
+        name: ceph-filesystem
+        pool: data0
+        # Never let a PVC lifecycle delete family data.
+        reclaimPolicy: Retain
+        allowVolumeExpansion: true
+        volumeBindingMode: Immediate
+        parameters:
+          csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+          csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+          csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/controller-publish-secret-name: rook-csi-cephfs-provisioner
+          csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+          csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
 
   cephObjectStores: []
