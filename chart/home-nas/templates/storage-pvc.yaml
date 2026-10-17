@@ -1,0 +1,16 @@
+{{- $c := .Values.cephfs }}
+{{- range $name, $path := $c.subvolumes }}
+{{- if not $path }}{{ fail (printf "cephfs.subvolumes.%s must be verified via ceph fs subvolume getpath" $name) }}{{- end }}
+{{- end }}
+{{- $volumes := list (dict "pv" "homes-pv" "claim" "homes") (dict "pv" "shared-pv" "claim" "shared") }}
+{{- range $v := $volumes }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: {name: {{ $v.claim }}, namespace: storage}
+spec:
+  accessModes: [ReadWriteMany]
+  storageClassName: ""
+  volumeName: {{ $v.pv }}
+  resources: {requests: {storage: {{ $c.capacity }}}}
+---
+{{- end }}

@@ -1,0 +1,11 @@
+cephfs:
+  clusterID: rook-ceph
+  fsName: home-fs
+  subvolumes: {homes: "", shared: ""}
+  nodeStageSecrets:
+    homes: homes-cephfs-node
+    shared: shared-cephfs-node
+  capacity: 2Ti
+samba:
+  image: quay.io/samba.org/samba-server:default-fedora-any@sha256:11832c27731ae4937460a3911cdb52f1e6021d0f5b237a9104bf5a8788159e65
+  configSecret: samba-config

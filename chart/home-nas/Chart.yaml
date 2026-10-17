@@ -1,0 +1,5 @@
+apiVersion: v2
+name: home-nas
+description: Private Samba access to CephFS over Tailscale
+type: application
+version: 0.1.1
