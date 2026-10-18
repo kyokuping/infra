@@ -17,7 +17,7 @@ flux-instance:
 
     cluster:
       type: kubernetes
-      size: "small"
+      size: "large"
       domain: "cluster.local"
       networkPolicy: true
       multitenant: false
