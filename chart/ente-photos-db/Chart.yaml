@@ -1,0 +1,9 @@
+apiVersion: v2
+name: ente-photos-db
+description: CloudNativePG database for Ente Photos
+annotations:
+  releaseName: ente-photos-db
+  namespace: ente-photos
+
+type: application
+version: 0.1.0

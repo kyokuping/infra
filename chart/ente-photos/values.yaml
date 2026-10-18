@@ -1,0 +1,78 @@
+# Minimal, API-only Ente deployment. Secrets are kept out of this file and
+# supplied by the `ente-photos-credentials` SealedSecret.
+ente-photos:
+  externalDatabase:
+    host: ente-photos-db-rw.ente-photos.svc.cluster.local
+    port: 5432
+    database: ente
+    user: ente
+    existingSecret:
+      enabled: true
+      secretName: ente-photos-db-app
+      passwordKey: password
+
+  credentials:
+    # Contains credentials.yaml; see README.md for the required fields.
+    existingSecret: ente-photos-credentials
+
+  museum:
+    image:
+      # Ente moved its container images from ghcr.io/ente-io in June 2026.
+      # Pin the immutable commit tag currently published as `latest` so a
+      # reconciliation cannot silently replace the server binary.
+      repository: ghcr.io/ente/server
+      tag: 163f45c26f130090abed03649530f53d2d976565
+    config:
+      db:
+        sslmode: disable
+      s3:
+        # R2 is reached over HTTPS, so it is not a local bucket. It does use
+        # path-style requests with the account-level S3 endpoint.
+        areLocalBuckets: false
+        usePathStyleUrls: true
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    # Node-local cloudflared connects to Traefik's HTTPS NodePort. Traefik then
+    # routes this sole hostname to Museum's internal Service on port 8080.
+    ingress:
+      enabled: true
+      className: traefik-proxy
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      hosts:
+        - host: photos.kyoku.dev
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: ente-photos-tls
+          hosts:
+            - photos.kyoku.dev
+
+  web:
+    photos:
+      enabled: false
+    auth:
+      enabled: false
+    accounts:
+      enabled: false
+    albums:
+      enabled: false
+    share:
+      enabled: false
+
+  # No Prometheus Operator is installed in this cluster.
+  metrics:
+    serviceMonitor:
+      enabled: false
+
+  # Let the existing cluster policy govern the minimal deployment. This avoids
+  # accidentally blocking the Cloudflare Tunnel connector in another namespace.
+  networkPolicy:
+    enabled: false

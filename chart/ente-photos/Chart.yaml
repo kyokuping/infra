@@ -1,0 +1,14 @@
+apiVersion: v2
+name: ente-photos
+description: Ente Photos configured for the kyoku.dev Kubernetes cluster
+annotations:
+  releaseName: ente-photos
+  namespace: ente-photos
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: ente-photos
+    version: 0.2.0
+    repository: https://l4gdev.github.io/helm-charts

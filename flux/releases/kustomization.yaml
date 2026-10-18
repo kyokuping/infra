@@ -17,6 +17,8 @@ resources:
   - cert-manager-issuer.yaml
   - vaultwarden-db.yaml
   - vaultwarden.yaml
+  - ente-photos-db.yaml
+  - ente-photos.yaml
   - clickhouse-operator.yaml
   - clickstack-values.yaml
   - clickstack.yaml
