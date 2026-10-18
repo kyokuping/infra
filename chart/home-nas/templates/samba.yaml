@@ -12,6 +12,14 @@ spec:
       hostIPC: false
       hostNetwork: false
       hostPID: false
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values: [mac-mini-orbstack]
       containers:
       - name: samba
         image: {{ .Values.samba.image }}
