@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ente-photos-db
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  instances: 1
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values: [mac-mini-orbstack]
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  bootstrap:
+    initdb:
+      database: {{ .Values.database.name }}
+      owner: {{ .Values.database.owner }}
+  storage:
+    storageClass: {{ .Values.database.storageClass }}
+    size: {{ .Values.database.size }}
