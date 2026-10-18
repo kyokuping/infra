@@ -30,6 +30,7 @@ flux-instance:
       ref: refs/heads/main
       path: ./flux
       interval: 5m
+      pullSecret: flux-git-auth
 
     commonMetadata:
       labels:

@@ -27,3 +27,4 @@ resources:
   - home-nas-cephfs-secrets.yaml
   - home-nas.yaml
   - vllm.yaml
+  - flux-git-auth.yaml
