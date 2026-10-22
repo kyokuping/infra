@@ -23,6 +23,7 @@ resources:
   - clickstack-values.yaml
   - clickstack.yaml
   - otel-agent.yaml
+  - trivy-operator.yaml
   - storage-namespace.yaml
   - samba-config.yaml
   - home-nas-values.yaml
