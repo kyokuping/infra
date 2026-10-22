@@ -6,6 +6,11 @@ metadata:
     helm.sh/resource-policy: keep
 spec:
   instances: 1
+  inheritedMetadata:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /metrics
+      prometheus.io/port: "9187"
   bootstrap:
     initdb:
       database: vaultwarden

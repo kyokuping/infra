@@ -13,6 +13,10 @@ ente-photos:
     existingSecret: ente-photos-credentials
 
   museum:
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /metrics
+      prometheus.io/port: "2112"
     image:
       repository: ghcr.io/ente/server
       tag: 163f45c26f130090abed03649530f53d2d976565

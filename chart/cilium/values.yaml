@@ -2,9 +2,26 @@ cilium:
   cluster:
     name: kubernetes
 
+  prometheus:
+    enabled: true
+
+  envoy:
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /metrics
+      prometheus.io/port: "9964"
+
   hubble:
+    metrics:
+      enabled:
+        - dns:query;ignoreAAAA
+        - drop
+        - tcp
+        - icmp
     relay:
       enabled: true
+      prometheus:
+        enabled: true
     tls:
       auto:
         method: cronJob

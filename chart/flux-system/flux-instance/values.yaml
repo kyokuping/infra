@@ -39,6 +39,19 @@ flux-instance:
       annotations:
         ops.kyoku.dev/owner: "kyokuping"
 
+    kustomize:
+      patches:
+        - target:
+            kind: Deployment
+            labelSelector: app.kubernetes.io/part-of=flux
+          patch: |
+            - op: add
+              path: /spec/template/metadata/annotations
+              value:
+                prometheus.io/scrape: "true"
+                prometheus.io/path: /metrics
+                prometheus.io/port: "8080"
+
   healthcheck:
     enabled: true
     timeout: 5m

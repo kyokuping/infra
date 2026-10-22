@@ -1,0 +1,7 @@
+clickhouse-operator-helm:
+  metrics:
+    enabled: true
+    secure: false
+  prometheus:
+    scraping_annotations: true
+    enabled: false

@@ -11,6 +11,10 @@ spec:
       app.kubernetes.io/name: {{ .Release.Name }}
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8000"
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
