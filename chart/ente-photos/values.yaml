@@ -16,6 +16,10 @@ ente-photos:
     existingSecret: ente-photos-credentials
 
   museum:
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /metrics
+      prometheus.io/port: "2112"
     image:
       # Ente moved its container images from ghcr.io/ente-io in June 2026.
       # Pin the immutable commit tag currently published as `latest` so a

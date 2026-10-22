@@ -12,6 +12,15 @@ rook-ceph-cluster:
 
     mgr:
       count: 1
+      modules:
+        - name: prometheus
+          enabled: true
+
+    annotations:
+      mgr:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9283"
 
     storage:
       useAllNodes: false

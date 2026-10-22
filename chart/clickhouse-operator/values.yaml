@@ -1,0 +1,10 @@
+clickhouse-operator-helm:
+  # The endpoint is cluster-internal and scraped by the node-local OTel agent.
+  # Plain HTTP avoids controller-runtime's bearer-token/TLS requirements, which
+  # the annotation-based scraper cannot satisfy.
+  metrics:
+    enabled: true
+    secure: false
+  prometheus:
+    scraping_annotations: true
+    enabled: false

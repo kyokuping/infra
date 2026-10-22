@@ -2,9 +2,32 @@ cilium:
   cluster:
     name: kubernetes
 
+  # The node-local OTel agent scrapes these pod endpoints and forwards them to
+  # ClickStack. ServiceMonitors stay disabled because this cluster does not run
+  # Prometheus Operator.
+  prometheus:
+    enabled: true
+
+  envoy:
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /metrics
+      prometheus.io/port: "9964"
+
   hubble:
+    metrics:
+      # HTTP metrics attach path/status labels and are disproportionately high
+      # cardinality. These protocol/health signals cover the useful failure
+      # modes without retaining request paths in ClickHouse.
+      enabled:
+        - dns:query;ignoreAAAA
+        - drop
+        - tcp
+        - icmp
     relay:
       enabled: true
+      prometheus:
+        enabled: true
     tls:
       auto:
         method: cronJob

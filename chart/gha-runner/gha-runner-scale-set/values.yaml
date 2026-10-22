@@ -6,6 +6,29 @@ system-playground:
   minRunners: 0
   maxRunners: 3
 
+  listenerTemplate:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+
+  # Keep only stable, operational labels. Job/workflow/event labels create a
+  # new time series for almost every CI workload and are poor ClickHouse value.
+  listenerMetrics:
+    counters:
+      gha_started_jobs_total:
+        labels: [repository]
+      gha_completed_jobs_total:
+        labels: [repository, job_result]
+    gauges:
+      gha_assigned_jobs:
+        labels: [name, namespace, repository]
+      gha_running_jobs:
+        labels: [name, namespace, repository]
+      gha_registered_runners:
+        labels: [name, namespace, repository]
+
   template:
     spec:
       nodeSelector:
