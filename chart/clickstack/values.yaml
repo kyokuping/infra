@@ -71,8 +71,12 @@ clickstack:
       spec:
         containerTemplate:
           resources:
+            requests:
+              cpu: 500m
+              memory: 3Gi
             limits:
               cpu: 2
+              memory: 3Gi
           volumeMounts:
             - name: udf
               mountPath: /opt/clickhouse-udf
@@ -95,16 +99,16 @@ clickstack:
             user_defined_zookeeper_path: /clickhouse/user_defined
             user_defined_executable_functions_config: /opt/clickhouse-udf/*_function.yaml
             user_scripts_path: /opt/clickhouse-udf/
-            background_pool_size: 4
+            background_pool_size: 2
             background_merges_mutations_concurrency_ratio: 1
-            mark_cache_size: 268435456
-            index_mark_cache_size: 67108864
-            primary_index_cache_size: 67108864
+            mark_cache_size: 134217728
+            index_mark_cache_size: 33554432
+            primary_index_cache_size: 33554432
             merge_tree:
               merge_max_block_size: 1024
-              number_of_free_entries_in_pool_to_execute_mutation: 2
-              number_of_free_entries_in_pool_to_lower_max_size_of_merge: 2
-              number_of_free_entries_in_pool_to_execute_optimize_entire_partition: 2
+              number_of_free_entries_in_pool_to_execute_mutation: 1
+              number_of_free_entries_in_pool_to_lower_max_size_of_merge: 1
+              number_of_free_entries_in_pool_to_execute_optimize_entire_partition: 1
         dataVolumeClaimSpec:
           storageClassName: ceph-block
           resources:
@@ -119,7 +123,7 @@ clickstack:
     resources:
       requests:
         cpu: 100m
-        memory: 256Mi
+        memory: 512Mi
       limits:
         cpu: 500m
-        memory: 512Mi
+        memory: 1Gi
