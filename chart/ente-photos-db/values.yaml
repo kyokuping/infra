@@ -3,3 +3,12 @@ database:
   owner: ente
   storageClass: ceph-block
   size: 20Gi
+
+backup:
+  enabled: true
+  accountId: "58f0bd4959b8fa1c0c9ea153f6db2c69"
+  bucket: "ente-photos"
+  prefix: postgresql
+  credentialsSecret: ente-photos-db-r2-credentials
+  retentionPolicy: 30d
+  schedule: "0 0 3 * * *"

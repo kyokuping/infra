@@ -5,12 +5,14 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
+  timeout: 15m
   releaseName: ente-photos-db
   targetNamespace: ente-photos
   storageNamespace: ente-photos
   dependsOn:
     - name: cloudnative-pg
     - name: rook-ceph-cluster
+    - name: secrets-operator
   install:
     createNamespace: true
   chart:

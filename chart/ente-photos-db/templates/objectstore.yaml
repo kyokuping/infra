@@ -1,0 +1,26 @@
+{{- if .Values.backup.enabled }}
+{{- $accountId := required "backup.accountId is required when backup.enabled is true" .Values.backup.accountId }}
+{{- $bucket := required "backup.bucket is required when backup.enabled is true" .Values.backup.bucket }}
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: ente-photos-r2
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  retentionPolicy: {{ .Values.backup.retentionPolicy | quote }}
+  configuration:
+    destinationPath: s3://{{ $bucket }}/{{ .Values.backup.prefix }}/
+    endpointURL: https://{{ $accountId }}.r2.cloudflarestorage.com
+    s3Credentials:
+      accessKeyId:
+        name: {{ .Values.backup.credentialsSecret }}
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: {{ .Values.backup.credentialsSecret }}
+        key: SECRET_ACCESS_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
+{{- end }}
