@@ -9,7 +9,7 @@ spec:
   schedule: "0 0 3 * * *"
   backupOwnerReference: self
   cluster:
-    name: vaultwarden-db
+    name: vaultwarden-db-v2
   method: plugin
   pluginConfiguration:
     name: barman-cloud.cloudnative-pg.io
