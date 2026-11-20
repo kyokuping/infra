@@ -3,7 +3,7 @@ kind: ScheduledBackup
 metadata:
   annotations:
     helm.sh/resource-policy: keep
-  name: vaultwarden-db-daily
+  name: vaultwarden-db-v2-daily
 spec:
   immediate: true
   schedule: "0 0 3 * * *"
