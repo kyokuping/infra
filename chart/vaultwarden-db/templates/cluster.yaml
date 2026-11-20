@@ -18,6 +18,13 @@ spec:
   storage:
     storageClass: ceph-block
     size: 2Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 192Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
