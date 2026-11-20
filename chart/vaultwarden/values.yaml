@@ -1,13 +1,13 @@
 vaultwarden:
   database:
     type: postgresql
-    existingSecret: vaultwarden-db-app
+    existingSecret: vaultwarden-db-app2
     existingSecretKey: uri
   storage:
     data:
-      name: vaultwarden-data
+      name: vaultwarden-data2
       size: 1Gi
-      class: ceph-block
+      class: local-static
       accessMode: ReadWriteOnce
       keepPvc: true
   strategy:
