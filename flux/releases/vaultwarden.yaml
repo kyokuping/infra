@@ -9,7 +9,6 @@ spec:
   targetNamespace: vaultwarden
   storageNamespace: vaultwarden
   dependsOn:
-    - name: vaultwarden-db
     - name: traefik-proxy
     - name: cert-manager-issuer
   chart:
